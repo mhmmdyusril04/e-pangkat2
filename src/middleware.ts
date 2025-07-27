@@ -1,5 +1,6 @@
 import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server';
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const isProtectedRoute = createRouteMatcher(['/dashboard(.*)']);
 
 const isPublicRoute = createRouteMatcher([

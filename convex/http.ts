@@ -25,6 +25,7 @@ http.route({
 
             switch (result.type) {
                 case 'user.created':
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
                     const nipFromClerk = ((result.data as any).public_metadata?.nip as string) || '';
                     if (!nipFromClerk) {
                         console.warn(`User dengan ID ${result.data.id} dibuat tanpa NIP di metadata.`);
@@ -55,6 +56,7 @@ http.route({
             return new Response(null, {
                 status: 200,
             });
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         } catch (err) {
             return new Response('Webhook Error', {
                 status: 400,

@@ -63,12 +63,15 @@ export const checkAndSendPromotionReminders = internalAction({
             let periode: string;
 
             // --- LOGIKA UNTUK PRODUKSI (VERCEL) ---
+            // eslint-disable-next-line prefer-const
             promotionDate = new Date(tmtDate);
             promotionDate.setFullYear(tmtDate.getFullYear() + 4); // H+4 Tahun
             promotionDate.setHours(0, 0, 0, 0);
 
+            // eslint-disable-next-line prefer-const
             notifStartDate = new Date(promotionDate);
             notifStartDate.setMonth(notifStartDate.getMonth() - 2); // H-2 Bulan
+            // eslint-disable-next-line prefer-const
             periode = `${promotionDate.getFullYear()}`;
 
             // --- LOGIKA UNTUK DEVELOPMENT (LOKAL) ---

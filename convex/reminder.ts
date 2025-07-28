@@ -1,6 +1,7 @@
 import { v } from 'convex/values';
 import { api, internal } from './_generated/api';
 import { internalAction, internalMutation } from './_generated/server';
+import { action } from "./_generated/server";
 
 // Daftar Pangkat S1 yang menjadi batas akhir
 const PANGKAT_S1_MAX = 'III/d';
@@ -63,26 +64,27 @@ export const checkAndSendPromotionReminders = internalAction({
             let periode: string;
 
             // --- LOGIKA UNTUK PRODUKSI (VERCEL) ---
-            // promotionDate = new Date(tmtDate);
-            // promotionDate.setFullYear(tmtDate.getFullYear() + 4); // H+4 Tahun
-            // promotionDate.setHours(0, 0, 0, 0);
-
-            // // eslint-disable-next-line prefer-const
-            // notifStartDate = new Date(promotionDate);
-            // notifStartDate.setMonth(notifStartDate.getMonth() - 2); // H-2 Bulan
-            // // eslint-disable-next-line prefer-const
-            // periode = `${promotionDate.getFullYear()}`;
-
-            // --- LOGIKA UNTUK DEVELOPMENT (LOKAL) ---
             // eslint-disable-next-line prefer-const
             promotionDate = new Date(tmtDate);
-            promotionDate.setDate(tmtDate.getDate() + 1); // H+1 Hari
+            promotionDate.setFullYear(tmtDate.getFullYear() + 4); // H+4 Tahun
+            promotionDate.setHours(0, 0, 0, 0);
 
             // eslint-disable-next-line prefer-const
-            notifStartDate = tmtDate;
-
+            notifStartDate = new Date(promotionDate);
+            notifStartDate.setMonth(notifStartDate.getMonth() - 2); // H-2 Bulan
             // eslint-disable-next-line prefer-const
-            periode = `DEV-${promotionDate.toISOString().slice(0, 10)}`;
+            periode = `${promotionDate.getFullYear()}`;
+
+            // --- LOGIKA UNTUK DEVELOPMENT (LOKAL) ---
+            // // eslint-disable-next-line prefer-const
+            // promotionDate = new Date(tmtDate);
+            // promotionDate.setDate(tmtDate.getDate() + 1); // H+1 Hari
+
+            // // eslint-disable-next-line prefer-const
+            // notifStartDate = tmtDate;
+
+            // // eslint-disable-next-line prefer-const
+            // periode = `DEV-${promotionDate.toISOString().slice(0, 10)}`;
 
             if (today >= notifStartDate && today <= promotionDate) {
                 console.log(`Pegawai ${pegawai.name} memenuhi syarat tanggal untuk notifikasi.`);
@@ -122,4 +124,11 @@ export const checkAndSendPromotionReminders = internalAction({
         }
         console.log('Pengecekan kenaikan pangkat selesai.');
     },
+});
+
+export const runManualReminder = action({
+  handler: async (ctx) => {
+    await ctx.runAction(internal.reminder.checkAndSendPromotionReminders, {});
+    console.log("✅ Manual Reminder dijalankan!");
+  },
 });

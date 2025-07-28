@@ -168,6 +168,7 @@ function UsersPageContent() {
                                     <Select onValueChange={field.onChange} defaultValue={field.value}>
                                         <FormControl><SelectTrigger><SelectValue /></SelectTrigger></FormControl>
                                         <SelectContent>
+                                            <SelectItem value="SMA">SMA</SelectItem>
                                             <SelectItem value="S1">S1</SelectItem>
                                             <SelectItem value="S2">S2</SelectItem>
                                             <SelectItem value="S3">S3</SelectItem>

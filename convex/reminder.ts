@@ -63,27 +63,26 @@ export const checkAndSendPromotionReminders = internalAction({
             let periode: string;
 
             // --- LOGIKA UNTUK PRODUKSI (VERCEL) ---
-            // eslint-disable-next-line prefer-const
-            promotionDate = new Date(tmtDate);
-            promotionDate.setFullYear(tmtDate.getFullYear() + 4); // H+4 Tahun
-            promotionDate.setHours(0, 0, 0, 0);
+            // promotionDate = new Date(tmtDate);
+            // promotionDate.setFullYear(tmtDate.getFullYear() + 4); // H+4 Tahun
+            // promotionDate.setHours(0, 0, 0, 0);
 
-            // eslint-disable-next-line prefer-const
-            notifStartDate = new Date(promotionDate);
-            notifStartDate.setMonth(notifStartDate.getMonth() - 2); // H-2 Bulan
-            // eslint-disable-next-line prefer-const
-            periode = `${promotionDate.getFullYear()}`;
+            // // eslint-disable-next-line prefer-const
+            // notifStartDate = new Date(promotionDate);
+            // notifStartDate.setMonth(notifStartDate.getMonth() - 2); // H-2 Bulan
+            // // eslint-disable-next-line prefer-const
+            // periode = `${promotionDate.getFullYear()}`;
 
             // --- LOGIKA UNTUK DEVELOPMENT (LOKAL) ---
-            // promotionDate = new Date(tmtDate);
-            // promotionDate.setDate(tmtDate.getDate() + 1); // H+1 Hari
-            // // promotionDate.setHours(0, 0, 0, 0);
+            // eslint-disable-next-line prefer-const
+            promotionDate = new Date(tmtDate);
+            promotionDate.setDate(tmtDate.getDate() + 1); // H+1 Hari
 
-            // notifStartDate = tmtDate;
+            // eslint-disable-next-line prefer-const
+            notifStartDate = tmtDate;
 
-            // // notifStartDate = new Date(promotionDate);
-            // // notifStartDate.setHours(notifStartDate.getMinutes() - 4); // H-4 Menit
-            // periode = `DEV-${promotionDate.toISOString().slice(0, 10)}`;
+            // eslint-disable-next-line prefer-const
+            periode = `DEV-${promotionDate.toISOString().slice(0, 10)}`;
 
             if (today >= notifStartDate && today <= promotionDate) {
                 console.log(`Pegawai ${pegawai.name} memenuhi syarat tanggal untuk notifikasi.`);

@@ -1,6 +1,5 @@
 import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server';
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const isProtectedRoute = createRouteMatcher(['/dashboard(.*)']);
 
 const isPublicRoute = createRouteMatcher([
@@ -11,9 +10,9 @@ const isPublicRoute = createRouteMatcher([
 ]);
 
 export default clerkMiddleware(async (auth, req) => {
-    // if (isProtectedRoute(req)) {
-    //     await auth.protect(); // Protect routes that match the pattern
-    // }
+    if (isProtectedRoute(req)) {
+        await auth.protect(); // Protect routes that match the pattern
+    }
 
     if (!isPublicRoute(req)) {
         auth.protect();

@@ -8,7 +8,7 @@ import {
   query,
   QueryCtx,
 } from "./_generated/server";
-import { pendidikanLevel, roles } from "./schema";
+import { roles } from "./schema";
 
 export async function getUser(
   ctx: QueryCtx | MutationCtx,
@@ -83,10 +83,8 @@ export const adminUpdatePegawaiData = mutation({
     role: roles,
     name: v.string(),
     pangkat: v.string(),
-    golongan: v.string(),
-    tanggalLahir: v.string(),
+    naikPangkat: v.string(),
     tmtPangkat: v.string(),
-    pendidikan: pendidikanLevel,
   },
   async handler(ctx, args) {
     await adminOnly(ctx);
@@ -126,9 +124,18 @@ export const adminDeleteUser = mutation({
     const clerkClient = createClerkClient({
       secretKey: process.env.CLERK_SECRET_KEY,
     });
-    const clerkUserId = user.tokenIdentifier.split("|")[1];
-    if (clerkUserId) {
-      await clerkClient.users.deleteUser(clerkUserId);
+    const tokenParts = user.tokenIdentifier?.split("|");
+
+    if (tokenParts?.length === 2) {
+      const clerkUserId = tokenParts[1];
+      try {
+        await clerkClient.users.deleteUser(clerkUserId);
+      } catch (err) {
+        console.error("Gagal hapus user di Clerk:", err);
+        // Tidak perlu throw, supaya proses tidak gagal total
+      }
+    } else {
+      console.warn("Format tokenIdentifier tidak valid:", user.tokenIdentifier);
     }
   },
 });
@@ -150,7 +157,7 @@ export const getPegawaiUsersInternal = internalQuery({
   },
 });
 
-export const createUser = internalMutation({
+export const createUser = mutation({
   args: {
     tokenIdentifier: v.string(),
     name: v.string(),
@@ -238,10 +245,8 @@ export const pegawaiUpdateData = mutation({
     name: v.string(),
     nip: v.string(),
     pangkat: v.string(),
-    golongan: v.string(),
-    tanggalLahir: v.string(),
+    naikPangkat: v.string(),
     tmtPangkat: v.string(),
-    pendidikan: v.string(),
   },
   handler: async (ctx, args) => {
     const identity = await ctx.auth.getUserIdentity();
@@ -256,18 +261,12 @@ export const pegawaiUpdateData = mutation({
 
     if (!user) throw new Error("User not found");
 
-    // Ensure pendidikan is of the correct type
-    const allowedPendidikan = ["SMA", "S1", "S2", "S3"];
-    const pendidikanValue = allowedPendidikan.includes(args.pendidikan) ? args.pendidikan as "S1" | "S2" | "S3" : undefined;
-
     await ctx.db.patch(user._id, {
       name: args.name,
       nip: args.nip,
       pangkat: args.pangkat,
-      golongan: args.golongan,
-      tanggalLahir: args.tanggalLahir,
+      naikPangkat: args.naikPangkat,
       tmtPangkat: args.tmtPangkat,
-      pendidikan: pendidikanValue,
     });
   },
 });

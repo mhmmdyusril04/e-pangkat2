@@ -1,31 +1,42 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
-import {
-    SignInButton,
-    SignedOut,
-    UserButton
-} from "@clerk/nextjs";
+import { SignInButton, SignedOut, UserButton } from "@clerk/nextjs";
 import Image from "next/image";
 import Link from "next/link";
 
 export function Header() {
-    return (
-        <div className="relative z-10 border-b px-4 py-4 bg-gray-50">
-            <div className="items-center container mx-auto justify-between flex">
-                <Link href="/" className="flex gap-2 items-center text-xl text-black">
-                    <Image src="/logo.png" width="50" height="50" alt="file drive logo" />
-                    Sistem e-pangkat
-                </Link>
+  return (
+    <header className="relative z-10 bg-gradient-to-r from-[#0D1B2A] to-[#1B263B] border-b border-blue-900 px-4 py-4 shadow">
+      <div className="container mx-auto flex justify-between items-center">
+        <Link
+          href="/"
+          className="flex items-center gap-3 text-white text-xl font-semibold"
+        >
+          <Image
+            src="/logo.jpg"
+            width={40}
+            height={40}
+            alt="ePangkat logo"
+            className="rounded-full"
+          />
+          <span>Sistem ePangkat</span>
+        </Link>
 
-                <div className="flex gap-2">
-                    {/* <OrganizationSwitcher /> */}
-                    <UserButton />
-                    <SignedOut>
-                        <SignInButton>
-                            <Button>Sign In</Button>
-                        </SignInButton>
-                    </SignedOut>
-                </div>
-            </div>
+        <div className="flex items-center gap-3">
+          <UserButton />
+          <SignedOut>
+            <SignInButton mode="modal">
+              <Button
+                variant="outline"
+                className="text-white bg-black border-white hover:bg-white hover:text-black"
+              >
+                Sign In
+              </Button>
+            </SignInButton>
+          </SignedOut>
         </div>
-    );
+      </div>
+    </header>
+  );
 }

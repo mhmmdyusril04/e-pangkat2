@@ -6,7 +6,6 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel,
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { ColumnDef } from "@tanstack/react-table";
 import { AlertCircle, MoreHorizontal, Trash2 } from "lucide-react";
-import Image from "next/image";
 
 export type UserColumn = Doc<"users"> & {
     openEditDialog: (user: Doc<"users">) => void;
@@ -14,15 +13,10 @@ export type UserColumn = Doc<"users"> & {
 };
 
 const isDataLengkap = (user: Doc<"users">) => {
-    return user.pangkat && user.golongan && user.tmtPangkat;
+    return user.pangkat && user.tmtPangkat;
 }
 
 export const columns: ColumnDef<UserColumn>[] = [
-    {
-        accessorKey: "image",
-        header: "Avatar",
-        cell: ({ row }) => <Image src={row.original.image || ""} alt={row.original.name} width={40} height={40} className="rounded-full" />,
-    },
     {
         accessorKey: "name",
         header: "Nama",
@@ -57,14 +51,7 @@ export const columns: ColumnDef<UserColumn>[] = [
     },
     {
         accessorKey: "pangkat",
-        header: "Pangkat",
-        meta: {
-            className: "hidden md:table-cell",
-        },
-    },
-    {
-        accessorKey: "golongan",
-        header: "Golongan",
+        header: "Pangkat & Gol",
         meta: {
             className: "hidden md:table-cell",
         },
@@ -77,8 +64,8 @@ export const columns: ColumnDef<UserColumn>[] = [
         },
     },
     {
-        accessorKey: "pendidikan",
-        header: "Pendidikan",
+        accessorKey: "naikPangkat",
+        header: "Naik Pangkat",
         meta: {
             className: "hidden lg:table-cell",
         },

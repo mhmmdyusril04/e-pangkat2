@@ -10,6 +10,7 @@ import { Loader2 } from "lucide-react";
 import { AdminDashboard } from "./AdminDashborad";
 import { PegawaiDashboard } from "./PegawaiDashboard";
 
+
 export default function DashboardPage() {
     const { isLoaded, isSignedIn } = useAuth();
 

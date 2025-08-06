@@ -4,13 +4,10 @@ import { internalAction, internalMutation } from "./_generated/server";
 import { action } from "./_generated/server";
 
 // Daftar Pangkat S1 yang menjadi batas akhir
-const PANGKAT_S1_MAX = "III/d";
-
 export const createPromotionRecord = internalMutation({
   args: {
     userId: v.id("users"),
     periodeNotifikasi: v.string(),
-    golonganSaatNotifikasi: v.string(),
     pangkatSaatNotifikasi: v.string(),
     initialChecklist: v.array(
       v.object({
@@ -24,7 +21,6 @@ export const createPromotionRecord = internalMutation({
     await ctx.db.insert("riwayatKenaikanPangkat", {
       userId: args.userId,
       periodeNotifikasi: args.periodeNotifikasi,
-      golonganSaatNotifikasi: args.golonganSaatNotifikasi,
       pangkatSaatNotifikasi: args.pangkatSaatNotifikasi,
       tanggalNotifikasiDikirim: new Date().toISOString().slice(0, 10),
       dokumenTerkumpul: args.initialChecklist,
@@ -53,33 +49,21 @@ export const checkAndSendPromotionReminders = internalAction({
     }));
 
     for (const pegawai of allPegawai) {
-      if (!pegawai.tmtPangkat || !pegawai.pendidikan) {
-        continue;
-      }
-
-      if (pegawai.pendidikan === "S1" && pegawai.pangkat === PANGKAT_S1_MAX) {
-        console.log(
-          `Pegawai ${pegawai.name} dilewati karena sudah mencapai pangkat maksimal S1.`
-        );
+      if (!pegawai.tmtPangkat) {
         continue;
       }
 
       const tmtDate = new Date(pegawai.tmtPangkat);
-      let promotionDate: Date;
-      let notifStartDate: Date;
-      let periode: string;
+      
 
       // --- LOGIKA UNTUK PRODUKSI (VERCEL) ---
-      // eslint-disable-next-line prefer-const
-      promotionDate = new Date(tmtDate);
+      const promotionDate = new Date(tmtDate);
       promotionDate.setFullYear(tmtDate.getFullYear() + 4); // H+4 Tahun
       promotionDate.setHours(0, 0, 0, 0);
 
-      // eslint-disable-next-line prefer-const
-      notifStartDate = new Date(promotionDate);
+      const notifStartDate = new Date(promotionDate);
       notifStartDate.setMonth(notifStartDate.getMonth() - 2); // H-2 Bulan
-      // eslint-disable-next-line prefer-const
-      periode = `${promotionDate.getFullYear()}`;
+      const periode = `${promotionDate.getFullYear()}`;
 
       // --- LOGIKA UNTUK DEVELOPMENT (LOKAL) ---
       // // eslint-disable-next-line prefer-const
@@ -113,7 +97,6 @@ export const checkAndSendPromotionReminders = internalAction({
           await ctx.runMutation(internal.reminder.createPromotionRecord, {
             userId: pegawai._id,
             periodeNotifikasi: periode,
-            golonganSaatNotifikasi: pegawai.golongan ?? "",
             pangkatSaatNotifikasi: pegawai.pangkat ?? "",
             initialChecklist: initialChecklist,
           });

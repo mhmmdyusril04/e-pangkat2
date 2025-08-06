@@ -33,13 +33,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -57,10 +50,8 @@ export function PegawaiDashboard() {
     name: z.string().min(1, "Nama tidak boleh kosong"),
     nip: z.string().min(1, "NIP tidak boleh kosong"),
     pangkat: z.string().min(1, "Pangkat tidak boleh kosong"),
-    golongan: z.string().min(1, "Golongan tidak boleh kosong"),
-    tanggalLahir: z.string().min(1, "Tanggal lahir tidak boleh kosong"),
+    naikPangkat: z.string().min(1, "Naik Pangkat tidak boleh kosong"),
     tmtPangkat: z.string().min(1, "TMT Pangkat tidak boleh kosong"),
-    pendidikan: z.enum(["SMA", "S1", "S2", "S3"]),
   });
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -69,10 +60,8 @@ export function PegawaiDashboard() {
       name: me?.name || "",
       nip: me?.nip || "",
       pangkat: me?.pangkat || "",
-      golongan: me?.golongan || "",
-      tanggalLahir: me?.tanggalLahir || "",
+      naikPangkat: me?.naikPangkat || "",
       tmtPangkat: me?.tmtPangkat || "",
-      pendidikan: me?.pendidikan || "S1",
     },
   });
 
@@ -118,21 +107,15 @@ export function PegawaiDashboard() {
             </div>
             <div>
               <p className="font-semibold">Pangkat / Golongan</p>
-              <p>
-                {me.pangkat} ({me.golongan})
-              </p>
+              <p>{me.pangkat}</p>
             </div>
             <div>
               <p className="font-semibold">TMT Pangkat</p>
               <p>{me.tmtPangkat}</p>
             </div>
             <div>
-              <p className="font-semibold">Pendidikan Terakhir</p>
-              <p>{me.pendidikan}</p>
-            </div>
-            <div>
-              <p className="font-semibold">Tanggal Lahir</p>
-              <p>{me.tanggalLahir}</p>
+              <p className="font-semibold">Naik Pangkat</p>
+              <p>{me.naikPangkat}</p>
             </div>
           </div>
         </CardContent>
@@ -171,8 +154,7 @@ export function PegawaiDashboard() {
                         Periode {item.periodeNotifikasi}
                       </p>
                       <p className="text-sm text-muted-foreground">
-                        Pangkat Awal: {item.pangkatSaatNotifikasi} (
-                        {item.golonganSaatNotifikasi})
+                        Pangkat Awal: {item.pangkatSaatNotifikasi}
                       </p>
                       <div className="flex items-center gap-2 mt-2">
                         <Progress value={progressValue} className="w-32 h-2" />
@@ -226,7 +208,7 @@ export function PegawaiDashboard() {
           <DialogHeader>
             <DialogTitle>Lengkapi Data Kepegawaian Anda</DialogTitle>
           </DialogHeader>
-          <br/>
+          <br />
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
               <FormField
@@ -269,24 +251,11 @@ export function PegawaiDashboard() {
                 )}
               />
               <FormField
-                name="golongan"
+                name="naikPangkat"
                 control={form.control}
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Golongan</FormLabel>
-                    <FormControl>
-                      <Input {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                name="tanggalLahir"
-                control={form.control}
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Tanggal Lahir</FormLabel>
+                    <FormLabel>Naik Pangkat</FormLabel>
                     <FormControl>
                       <Input type="date" {...field} />
                     </FormControl>
@@ -303,32 +272,6 @@ export function PegawaiDashboard() {
                     <FormControl>
                       <Input type="date" {...field} />
                     </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                name="pendidikan"
-                control={form.control}
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Pendidikan</FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        <SelectItem value="SMA">SMA</SelectItem>
-                        <SelectItem value="S1">S1</SelectItem>
-                        <SelectItem value="S2">S2</SelectItem>
-                        <SelectItem value="S3">S3</SelectItem>
-                      </SelectContent>
-                    </Select>
                     <FormMessage />
                   </FormItem>
                 )}

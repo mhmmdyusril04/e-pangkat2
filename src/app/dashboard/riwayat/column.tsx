@@ -9,7 +9,6 @@ type RiwayatColumn = {
     nipPegawai: string;
     periodeNotifikasi: string;
     tanggalNotifikasiDikirim: string;
-    golonganSaatNotifikasi: string;
     pangkatSaatNotifikasi: string;
 };
 
@@ -27,13 +26,6 @@ export const columns: ColumnDef<RiwayatColumn>[] = [
         header: "Periode",
         meta: {
             className: "hidden sm:table-cell",
-        },
-    },
-    {
-        accessorKey: "golonganSaatNotifikasi",
-        header: "Golongan Awal",
-        meta: {
-            className: "hidden lg:table-cell",
         },
     },
     {

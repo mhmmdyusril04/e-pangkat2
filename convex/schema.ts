@@ -3,8 +3,6 @@ import { v } from 'convex/values';
 
 export const roles = v.union(v.literal('admin'), v.literal('pegawai'));
 
-export const pendidikanLevel = v.union(v.literal('S1'), v.literal('S2'), v.literal('S3'));
-
 export default defineSchema({
     users: defineTable({
         tokenIdentifier: v.string(),
@@ -13,11 +11,9 @@ export default defineSchema({
         name: v.string(),
         image: v.optional(v.string()),
 
-        golongan: v.optional(v.string()),
         pangkat: v.optional(v.string()),
-        tanggalLahir: v.optional(v.string()),
         tmtPangkat: v.optional(v.string()),
-        pendidikan: v.optional(pendidikanLevel),
+        naikPangkat: v.optional(v.string()),
         fcmToken: v.optional(v.string()),
     })
         .index('by_tokenIdentifier', ['tokenIdentifier'])
@@ -37,7 +33,6 @@ export default defineSchema({
             })
         ),
 
-        golonganSaatNotifikasi: v.string(),
         pangkatSaatNotifikasi: v.string(),
     }).index('by_userId', ['userId']),
 

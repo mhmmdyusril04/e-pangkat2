@@ -19,7 +19,7 @@ export function SideNav() {
     const me = useQuery(api.users.getMe);
 
     return (
-        <nav className="grid items-start text-sm font-medium">
+        <nav className="grid items-start text-sm font-medium text-white gap-2">
             <Link href="/dashboard">
                 <Button
                     variant="ghost"

@@ -3,7 +3,7 @@ import Link from "next/link";
 
 export default function LandingPage() {
   return (
-    <div className="bg-white">
+    <div className="bg-gradient-to-br from-[#0D1B2A] to-[#1B263B] min-h-screen">
       <div className="relative isolate px-6 pt-14 lg:px-8">
         <div
           className="absolute inset-x-0 -top-40 -z-10 transform-gpu overflow-hidden blur-3xl sm:-top-80"
@@ -20,18 +20,18 @@ export default function LandingPage() {
         <div className="mx-auto max-w-2xl py-8">
           <div className="text-center">
             <Image
-              src="/logo.png"
-              width="200"
-              height="200"
+              src="/image.png"
+              width="150"
+              height="150"
               alt="file drive logo"
-              className="inline-block mb-8"
+              className="inline-block mb-8 rounded-full"
             />
 
-            <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">
-              Sistem e-pangkat
+            <h1 className="text-4xl font-semibold tracking-tight text-white sm:text-6xl">
+              Sistem ePangkat
             </h1>
-            <p className="mt-6 text-lg leading-8 text-gray-600">
-              Aplikasi ini memudahkan pegawai dalam mengajukan dan memantau proses kenaikan pangkat secara cepat, transparan, dan terintegrasi.
+            <p className="mt-6 text-lg leading-8 text-white">
+              Aplikasi ini memudahkan kepegawaian dalam memantau proses kenaikan pangkat secara cepat, transparan, dan terintegrasi.
             </p>
             <div className="mt-10 flex items-center justify-center gap-x-6">
               <Link

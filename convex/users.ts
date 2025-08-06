@@ -157,7 +157,7 @@ export const getPegawaiUsersInternal = internalQuery({
   },
 });
 
-export const createUser = mutation({
+export const createUser = internalMutation({
   args: {
     tokenIdentifier: v.string(),
     name: v.string(),

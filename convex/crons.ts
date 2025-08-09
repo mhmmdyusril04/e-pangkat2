@@ -6,7 +6,7 @@ const crons = cronJobs();
 // if (process.env.NODE_ENV === 'production') {
 crons.daily(
   "check_promotion_reminders_daily",
-  { hourUTC: 8, minuteUTC: 47 },
+  { hourUTC: 9, minuteUTC: 10 },
   internal.reminder.checkAndSendPromotionReminders
 );
 // } else {

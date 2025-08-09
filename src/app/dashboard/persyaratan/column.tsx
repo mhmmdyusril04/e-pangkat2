@@ -72,7 +72,7 @@ export const columns: ColumnDef<RiwayatColumn>[] = [
             return (
                 <div className="flex items-center gap-2">
                     {isCompleted ? <CheckCircle className="text-green-500" /> : <XCircle className="text-red-500" />}
-                    <span>{dokumenDisetujui} / {totalDokumen} Dokumen</span>
+                    <span>{dokumenDisetujui} / {totalDokumen}</span>
                 </div>
             );
         }

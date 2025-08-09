@@ -55,15 +55,21 @@ export const checkAndSendPromotionReminders = internalAction({
 
       const tmtDate = new Date(pegawai.tmtPangkat);
       
+      let promotionDate: Date;
+      let notifStartDate: Date;
+      let periode: string;
 
       // --- LOGIKA UNTUK PRODUKSI (VERCEL) ---
-      const promotionDate = new Date(tmtDate);
+      // eslint-disable-next-line prefer-const
+      promotionDate = new Date(tmtDate);
       promotionDate.setFullYear(tmtDate.getFullYear() + 4); // H+4 Tahun
       promotionDate.setHours(0, 0, 0, 0);
 
-      const notifStartDate = new Date(promotionDate);
+      // eslint-disable-next-line prefer-const
+      notifStartDate = new Date(promotionDate);
       notifStartDate.setMonth(notifStartDate.getMonth() - 2); // H-2 Bulan
-      const periode = `${promotionDate.getFullYear()}`;
+      // eslint-disable-next-line prefer-const
+      periode = `${promotionDate.getFullYear()}`;
 
       // --- LOGIKA UNTUK DEVELOPMENT (LOKAL) ---
       // // eslint-disable-next-line prefer-const

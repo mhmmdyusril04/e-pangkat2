@@ -49,8 +49,6 @@ export default function CreateUserForm() {
       onSubmit={handleSubmit}
       className="max-w-md p-6 bg-white rounded-xl shadow space-y-4"
     >
-      <h2 className="text-xl font-semibold">Tambah User Baru</h2>
-
       <div>
         <label className="block text-sm font-medium">Username</label>
         <input

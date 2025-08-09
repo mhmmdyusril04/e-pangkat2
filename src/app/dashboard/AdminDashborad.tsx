@@ -15,7 +15,7 @@ export function AdminDashboard() {
 
       {/* Statistik */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
-        <Card className="bg-blue-950 text-white shadow-md">
+        <Card className="">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Total Pegawai</CardTitle>
             <Users className="h-5 w-5 text-white/60" />
@@ -27,7 +27,7 @@ export function AdminDashboard() {
           </CardContent>
         </Card>
 
-        <Card className="bg-blue-950 text-white shadow-md">
+        <Card className="">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">
               Total Notifikasi Terkirim
@@ -43,27 +43,27 @@ export function AdminDashboard() {
       </div>
 
       {/* Akses Cepat */}
-      <div className="bg-blue-950 text-white rounded-xl shadow-md p-6">
+      <div className="">
         <h2 className="text-lg font-semibold mb-4">Akses Cepat</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <Button
             asChild
             variant="outline"
-            className="bg-blue-950 text-white font-semibold hover:bg-gray-100"
+            className="hover:bg-blue-950 hover:text-white font-semibold"
           >
             <Link href="/dashboard/users">Manajemen Pegawai</Link>
           </Button>
           <Button
             asChild
             variant="outline"
-            className="bg-blue-950 text-white font-semibold hover:bg-gray-100"
+            className="hover:bg-blue-950 hover:text-white font-semibold"
           >
             <Link href="/dashboard/persyaratan">Status Persyaratan</Link>
           </Button>
           <Button
             asChild
             variant="outline"
-            className="bg-blue-950 text-white font-semibold hover:bg-gray-100"
+            className="hover:bg-blue-950 hover:text-white font-semibold"
           >
             <Link href="/dashboard/riwayat">Riwayat Notifikasi</Link>
           </Button>

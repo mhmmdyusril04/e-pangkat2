@@ -94,7 +94,12 @@ function UsersPageContent() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      
+      name: "",
+      nip: "",
+      pangkat: "",
+      naikPangkat: "",
+      tmtPangkat: "",
+      role: "pegawai",
     },
   });
 
@@ -165,7 +170,7 @@ function UsersPageContent() {
           </div>
           <Dialog>
             <DialogTrigger asChild>
-              <button className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+              <button className="bg-blue-950 text-white px-4 py-2 rounded-sm hover:bg-blue-700">
                 Tambah User
               </button>
             </DialogTrigger>

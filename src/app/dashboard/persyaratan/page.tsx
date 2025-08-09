@@ -73,7 +73,7 @@ function ManajemenDokumen() {
                 </div>
                 <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
                     <DialogTrigger asChild>
-                        <Button><PlusCircle className="mr-2 h-4 w-4" /> Tambah Dokumen</Button>
+                        <Button className="bg-blue-950"><PlusCircle className="mr-2 h-4 w-4 " /> Tambah Dokumen</Button>
                     </DialogTrigger>
                     <DialogContent>
                         <DialogHeader>

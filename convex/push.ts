@@ -65,7 +65,11 @@ export const sendPushNotification = internalAction({
       await getMessaging().send(message);
       console.log(`Notifikasi berhasil dikirim ke user ${userId}`);
     } catch (error) {
-      console.error("Gagal mengirim notifikasi:", error);
+      if (error instanceof Error) {
+        console.error("Gagal mengirim notifikasi:", error.message, error.stack);
+      } else {
+        console.error("Gagal mengirim notifikasi:", error);
+      }
     }
   },
 });

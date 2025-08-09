@@ -111,7 +111,7 @@ export function PegawaiDashboard() {
             </div>
             <div>
               <p className="font-semibold">TMT Pangkat</p>
-              <p>{me.tmtPangkat}</p>
+              <p className="readonly">{me.tmtPangkat}</p>
             </div>
             <div>
               <p className="font-semibold">Naik Pangkat</p>

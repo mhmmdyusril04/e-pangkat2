@@ -5,15 +5,30 @@ import { App, cert, initializeApp } from "firebase-admin/app";
 import { getMessaging } from "firebase-admin/messaging";
 import { api } from "./_generated/api";
 import { internalAction } from "./_generated/server";
+import fs from "fs";
 
 let firebaseApp: App | undefined;
 
 function getFirebaseApp() {
   if (firebaseApp) return firebaseApp;
-  const serviceAccountJson = process.env.FIREBASE_ADMIN_CONFIG;
-  if (!serviceAccountJson)
+
+  const config = process.env.FIREBASE_ADMIN_CONFIG;
+  if (!config)
     throw new Error("Environment variable FIREBASE_ADMIN_CONFIG is not set.");
-  const serviceAccount = JSON.parse(serviceAccountJson);
+
+  let serviceAccount;
+
+  try {
+    serviceAccount = JSON.parse(config); // coba parse langsung
+  } catch {
+    try {
+      const decoded = Buffer.from(config, "base64").toString("utf8");
+      serviceAccount = JSON.parse(decoded); // coba parse hasil decode
+    } catch {
+      serviceAccount = JSON.parse(fs.readFileSync(config, "utf8")); // terakhir, anggap path file
+    }
+  }
+
   firebaseApp = initializeApp({ credential: cert(serviceAccount) });
   return firebaseApp;
 }
@@ -34,34 +49,23 @@ export const sendPushNotification = internalAction({
         );
         return;
       }
+
       const message = {
         token: user.fcmToken,
-        notification: {
-          title,
-          body,
-        },
+        notification: { title, body },
         android: {
           priority: "high" as const,
-          notification: {
-            sound: "default",
-          },
+          notification: { sound: "default" },
         },
         apns: {
-          headers: {
-            "apns-priority": "10",
-          },
-          payload: {
-            aps: {
-              sound: "default",
-            },
-          },
+          headers: { "apns-priority": "10" },
+          payload: { aps: { sound: "default" } },
         },
         webpush: {
-          fcmOptions: {
-            link: `${process.env.NEXT_PUBLIC_APP_URL}/dashboard`,
-          },
+          fcmOptions: { link: `${process.env.NEXT_PUBLIC_APP_URL}/dashboard` },
         },
       };
+
       await getMessaging().send(message);
       console.log(`Notifikasi berhasil dikirim ke user ${userId}`);
     } catch (error) {

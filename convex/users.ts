@@ -1,4 +1,3 @@
-import { createClerkClient } from "@clerk/backend";
 import { ConvexError, v } from "convex/values";
 import {
   internalMutation,
@@ -105,38 +104,24 @@ export const adminDeleteUser = mutation({
     await adminOnly(ctx);
 
     const user = await ctx.db.get(args.userId);
-    if (!user) {
-      throw new ConvexError("User tidak ditemukan untuk dihapus.");
-    }
+    if (!user) throw new ConvexError("User tidak ditemukan untuk dihapus.");
 
+    // Hapus riwayat
     const riwayatTerkait = await ctx.db
       .query("riwayatKenaikanPangkat")
       .withIndex("by_userId", (q) => q.eq("userId", args.userId))
       .collect();
+    await Promise.all(riwayatTerkait.map((riwayat) => ctx.db.delete(riwayat._id)));
 
-    const deletePromises = riwayatTerkait.map((riwayat) =>
-      ctx.db.delete(riwayat._id)
-    );
-    await Promise.all(deletePromises);
-
+    // Hapus user di DB Convex
     await ctx.db.delete(args.userId);
 
-    const clerkClient = createClerkClient({
-      secretKey: process.env.CLERK_SECRET_KEY,
-    });
-    const tokenParts = user.tokenIdentifier?.split("|");
-
-    if (tokenParts?.length === 2) {
-      const clerkUserId = tokenParts[1];
-      try {
-        await clerkClient.users.deleteUser(clerkUserId);
-      } catch (err) {
-        console.error("Gagal hapus user di Clerk:", err);
-        // Tidak perlu throw, supaya proses tidak gagal total
-      }
-    } else {
-      console.warn("Format tokenIdentifier tidak valid:", user.tokenIdentifier);
+    // Return clerkUserId supaya frontend tahu ID-nya
+    let clerkUserId = user.tokenIdentifier ?? "";
+    if (clerkUserId.includes("|")) {
+      clerkUserId = clerkUserId.split("|")[1];
     }
+    return clerkUserId;
   },
 });
 

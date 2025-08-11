@@ -2,6 +2,8 @@ import { v } from "convex/values";
 import { api, internal } from "./_generated/api";
 import { internalAction, internalMutation } from "./_generated/server";
 import { action } from "./_generated/server";
+import { hitungPromotionDate, hitungNotifStartDate } from "../utils/dateUtils";
+
 
 // Daftar Pangkat S1 yang menjadi batas akhir
 export const createPromotionRecord = internalMutation({
@@ -52,8 +54,6 @@ export const checkAndSendPromotionReminders = internalAction({
       if (!pegawai.tmtPangkat) {
         continue;
       }
-
-      const tmtDate = new Date(pegawai.tmtPangkat);
       
       let promotionDate: Date;
       let notifStartDate: Date;
@@ -61,13 +61,9 @@ export const checkAndSendPromotionReminders = internalAction({
 
       // --- LOGIKA UNTUK PRODUKSI (VERCEL) ---
       // eslint-disable-next-line prefer-const
-      promotionDate = new Date(tmtDate);
-      promotionDate.setFullYear(tmtDate.getFullYear() + 4); // H+4 Tahun
-      promotionDate.setHours(0, 0, 0, 0);
-
+      promotionDate = hitungPromotionDate(pegawai.tmtPangkat);
       // eslint-disable-next-line prefer-const
-      notifStartDate = new Date(promotionDate);
-      notifStartDate.setMonth(notifStartDate.getMonth() - 2); // H-2 Bulan
+      notifStartDate = hitungNotifStartDate(promotionDate);
       // eslint-disable-next-line prefer-const
       periode = `${promotionDate.getFullYear()}`;
 

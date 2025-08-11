@@ -41,13 +41,14 @@ import {
 import { useToast } from "@/components/ui/use-toast";
 import { useAuth } from "@clerk/nextjs";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation, useQuery } from "convex/react";
+import { useAction, useMutation, useQuery } from "convex/react";
 import { Loader2 } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { columns, UserColumn } from "./column";
 import CreateUserForm from "./CreateUserForm";
+import { hitungPromotionDate } from "../../../../utils/dateUtils";
 
 const formSchema = z.object({
   name: z.string().min(1, "Nama tidak boleh kosong"),
@@ -138,12 +139,22 @@ function UsersPageContent() {
     setDeleteDialogOpen(true);
   };
 
+  const deleteUserInClerk = useAction(api.clerkAction.deleteUserInClerk);
+
   const handleDelete = async () => {
     if (!deletingUser) return;
     try {
-      await deleteUser({ userId: deletingUser._id });
+      // Hapus di Convex dan dapatkan clerkUserId
+      const clerkUserId = await deleteUser({ userId: deletingUser._id });
+
+      // Kalau ada ID Clerk, hapus juga di Clerk
+      if (clerkUserId && clerkUserId.startsWith("user_")) {
+        await deleteUserInClerk({ clerkUserId });
+      }
+
       toast({ title: "Sukses", description: "Pengguna dihapus." });
-    } catch {
+    } catch (err) {
+      console.error(err);
       toast({ title: "Gagal", description: "Tidak dapat menghapus." });
     } finally {
       setDeleteDialogOpen(false);
@@ -242,7 +253,21 @@ function UsersPageContent() {
                   <FormItem>
                     <FormLabel>TMT Pangkat</FormLabel>
                     <FormControl>
-                      <Input {...field} type="date" />
+                      <Input
+                        {...field}
+                        type="date"
+                        onChange={(e) => {
+                          field.onChange(e); // tetap simpan nilai tmtPangkat
+                          const tmt = e.target.value;
+                          if (tmt) {
+                            const promotionDate = hitungPromotionDate(tmt);
+                            form.setValue(
+                              "naikPangkat",
+                              promotionDate.toISOString().slice(0, 10)
+                            );
+                          }
+                        }}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -269,10 +294,7 @@ function UsersPageContent() {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Role</FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      value={field.value}
-                    >
+                    <Select onValueChange={field.onChange} value={field.value}>
                       <FormControl>
                         <SelectTrigger>
                           <SelectValue placeholder="Pilih role" />
